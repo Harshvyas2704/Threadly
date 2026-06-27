@@ -1,0 +1,16 @@
+{
+  "name": "threadly",
+  "version": "1.0.0",
+  "description": "This is a reddit style community app",
+  "repository": {
+    "type": "git",
+    "url": "."
+  },
+  "license": "ISC",
+  "author": "Harsh Vyas",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
