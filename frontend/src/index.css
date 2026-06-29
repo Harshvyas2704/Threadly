@@ -4,7 +4,7 @@
   --bg: #f3f4f6;
   --bg-grad: radial-gradient(
       1200px 600px at 100% -10%,
-      rgba(255, 69, 0, 0.06),
+      rgba(214, 51, 108, 0.06),
       transparent 60%
     ),
     #f3f4f6;
@@ -14,11 +14,14 @@
   --border-strong: #d4d7dc;
   --text: #0f1419;
   --muted: #646a73;
-  --primary: #ff4500;
-  --primary-hover: #e63e00;
-  --primary-soft: rgba(255, 69, 0, 0.1);
-  --upvote: #ff4500;
-  --downvote: #5f7dff;
+  --primary: #d6336c;
+  --primary-hover: #c02a5d;
+  --primary-2: #f06595;
+  --primary-soft: rgba(214, 51, 108, 0.1);
+  --primary-shadow: rgba(214, 51, 108, 0.28);
+  --upvote: #22c55e;
+  --downvote: #7c8cff;
+  --downvote-soft: rgba(124, 140, 255, 0.12);
   --danger: #e23b3b;
   --shadow-sm: 0 1px 2px rgba(15, 20, 25, 0.06);
   --shadow: 0 4px 16px rgba(15, 20, 25, 0.08);
@@ -30,7 +33,7 @@
   --bg: #0a0a0b;
   --bg-grad: radial-gradient(
       1200px 600px at 100% -10%,
-      rgba(255, 84, 20, 0.1),
+      rgba(240, 101, 149, 0.1),
       transparent 60%
     ),
     #0a0a0b;
@@ -40,11 +43,14 @@
   --border-strong: #3a3d42;
   --text: #e6e8eb;
   --muted: #9198a1;
-  --primary: #ff5e2c;
-  --primary-hover: #ff7847;
-  --primary-soft: rgba(255, 94, 44, 0.16);
-  --upvote: #ff5e2c;
-  --downvote: #7e97ff;
+  --primary: #f06595;
+  --primary-hover: #f783ac;
+  --primary-2: #ff8cba;
+  --primary-soft: rgba(240, 101, 149, 0.16);
+  --primary-shadow: rgba(240, 101, 149, 0.32);
+  --upvote: #2ee08a;
+  --downvote: #8ea2ff;
+  --downvote-soft: rgba(142, 162, 255, 0.16);
   --danger: #ff6060;
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
   --shadow: 0 4px 18px rgba(0, 0, 0, 0.5);
@@ -215,7 +221,7 @@ h3 {
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #ff6a2b, var(--primary));
+  background: linear-gradient(135deg, var(--primary-2), var(--primary));
   color: #fff;
   font-size: 13px;
   font-weight: 800;
@@ -386,7 +392,7 @@ h3 {
   display: block;
 }
 .logo-text {
-  background: linear-gradient(135deg, #ff6a2b, #ff4500);
+  background: linear-gradient(135deg, var(--primary-2), var(--primary));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -463,19 +469,19 @@ select.input {
 
 .btn {
   border: none;
-  background: linear-gradient(135deg, #ff6a2b, var(--primary));
+  background: linear-gradient(135deg, var(--primary-2), var(--primary));
   color: #fff;
   font-weight: 700;
   padding: 10px 18px;
   border-radius: var(--radius-pill);
   font-size: 14px;
-  box-shadow: 0 2px 10px rgba(255, 69, 0, 0.28);
+  box-shadow: 0 2px 10px var(--primary-shadow);
   transition: transform 0.15s, box-shadow 0.15s, filter 0.15s;
 }
 .btn:hover {
   filter: brightness(1.05);
   transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(255, 69, 0, 0.36);
+  box-shadow: 0 4px 16px var(--primary-shadow);
 }
 .btn:active {
   transform: translateY(0);
@@ -610,7 +616,7 @@ select.input {
 }
 .vote button.down:hover {
   color: var(--downvote);
-  background: rgba(95, 125, 255, 0.12);
+  background: var(--downvote-soft);
   transform: scale(1.15);
 }
 .vote button.up.active {
@@ -701,8 +707,8 @@ select.input {
 }
 .tabs button.active {
   color: #fff;
-  background: linear-gradient(135deg, #ff6a2b, var(--primary));
-  box-shadow: 0 2px 8px rgba(255, 69, 0, 0.3);
+  background: linear-gradient(135deg, var(--primary-2), var(--primary));
+  box-shadow: 0 2px 8px var(--primary-shadow);
 }
 
 /* ============================ Auth pages ============================ */
@@ -715,7 +721,7 @@ select.input {
 .auth-wrap h1 {
   text-align: center;
   margin: 0 0 20px;
-  background: linear-gradient(135deg, #ff6a2b, var(--primary));
+  background: linear-gradient(135deg, var(--primary-2), var(--primary));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -792,7 +798,7 @@ select.input {
   position: absolute;
   inset: 0 0 auto 0;
   height: 64px;
-  background: linear-gradient(135deg, rgba(255, 106, 43, 0.18), transparent);
+  background: linear-gradient(135deg, var(--primary-soft), transparent);
 }
 .community-header > * {
   position: relative;
@@ -813,7 +819,7 @@ select.input {
   width: 72px;
   height: 72px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #ff6a2b, var(--primary));
+  background: linear-gradient(135deg, var(--primary-2), var(--primary));
   color: #fff;
   font-size: 30px;
   font-weight: 800;
@@ -821,7 +827,7 @@ select.input {
   align-items: center;
   justify-content: center;
   margin: 0 auto 14px;
-  box-shadow: 0 4px 16px rgba(255, 69, 0, 0.35);
+  box-shadow: 0 4px 16px var(--primary-shadow);
 }
 
 .composer {
