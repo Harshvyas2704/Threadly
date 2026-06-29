@@ -1,5 +1,5 @@
 import { Router } from "express";
-import requireAuth from "../middlewares/auth.middleware.js";
+import requireAuth, { optionalAuth } from "../middlewares/auth.middleware.js";
 import {
   validateCreateComment,
   validateUpdateComment,
@@ -21,7 +21,7 @@ import {
 // addressed both under a post and on their own.
 const router = Router();
 
-router.get("/posts/:postId/comments", listComments);
+router.get("/posts/:postId/comments", optionalAuth, listComments);
 router.post(
   "/posts/:postId/comments",
   requireAuth,

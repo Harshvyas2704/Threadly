@@ -19,4 +19,20 @@ const requireAuth = asyncHandler(async (req, res, next) => {
   next();
 });
 
+// Sets req.user when a valid token is present, but never blocks the request.
+// Used on public reads that want to personalize (e.g. the viewer's own votes).
+export const optionalAuth = (req, res, next) => {
+  const header = req.headers.authorization || "";
+  const token = header.startsWith("Bearer ") ? header.slice(7) : null;
+  if (token) {
+    try {
+      const decoded = verifyAccessToken(token);
+      req.user = { _id: decoded._id, userName: decoded.userName };
+    } catch {
+      // Invalid/expired token on a public route — treat as a guest.
+    }
+  }
+  next();
+};
+
 export default requireAuth;

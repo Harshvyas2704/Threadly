@@ -1,5 +1,5 @@
 import { Router } from "express";
-import requireAuth from "../middlewares/auth.middleware.js";
+import requireAuth, { optionalAuth } from "../middlewares/auth.middleware.js";
 import {
   validateCreatePost,
   validateUpdatePost,
@@ -20,7 +20,7 @@ import {
 const router = Router();
 
 router.post("/", requireAuth, postRateLimit, validateCreatePost, createPost);
-router.get("/:id", getPost);
+router.get("/:id", optionalAuth, getPost);
 router.put("/:id", requireAuth, validateUpdatePost, updatePost);
 router.delete("/:id", requireAuth, deletePost);
 router.post("/:id/vote", requireAuth, voteRateLimit, validateVote, votePost);

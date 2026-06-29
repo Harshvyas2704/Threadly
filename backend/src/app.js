@@ -8,9 +8,22 @@ import { notFound, errorHandler } from "./middlewares/error.middleware.js";
 const app = express();
 
 // Core middleware
+// Credentialed CORS (httpOnly refresh cookie) can't use a wildcard origin, so
+// we reflect any origin listed in CORS_ORIGIN (comma-separated). Requests with
+// no Origin header (curl, mobile) are allowed through.
+const allowedOrigins = (process.env.CORS_ORIGIN || "")
+  .split(",")
+  .map((o) => o.trim())
+  .filter(Boolean);
+
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN || "*",
+    origin: (origin, callback) => {
+      // Allow non-browser clients (no Origin) and configured origins. For any
+      // other origin, just withhold the CORS headers (browser blocks it) rather
+      // than throwing a 500.
+      callback(null, !origin || allowedOrigins.includes(origin));
+    },
     credentials: true,
   }),
 );

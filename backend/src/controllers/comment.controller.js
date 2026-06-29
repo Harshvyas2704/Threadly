@@ -4,7 +4,7 @@ import Vote from "../models/vote.model.js";
 import ApiError from "../utils/apiError.util.js";
 import asyncHandler from "../utils/asyncHandler.util.js";
 import { successResponse } from "../utils/response.util.js";
-import { applyVote } from "../services/vote.service.js";
+import { applyVote, attachUserVotes } from "../services/vote.service.js";
 import {
   assertCanParticipate,
   getMembership,
@@ -44,8 +44,11 @@ export const listComments = asyncHandler(async (req, res) => {
     .populate("authorId", "userName avatar karma")
     .sort({ createdAt: 1 });
 
+  const presented = comments.map(presentComment);
+  await attachUserVotes(presented, req.user?._id, "comment");
+
   return successResponse(res, "Comments fetched successfully", {
-    comments: comments.map(presentComment),
+    comments: presented,
   });
 });
 

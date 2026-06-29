@@ -4,6 +4,7 @@ import ApiError from "../utils/apiError.util.js";
 import asyncHandler from "../utils/asyncHandler.util.js";
 import { successResponse } from "../utils/response.util.js";
 import { presentPost } from "../utils/postPresenter.util.js";
+import { attachUserVotes } from "../services/vote.service.js";
 
 const presentCommunity = (c) => ({
   _id: c._id,
@@ -40,10 +41,13 @@ export const search = asyncHandler(async (req, res) => {
       .sort(sort)
       .limit(limit);
 
+    const presented = posts.map(presentPost);
+    await attachUserVotes(presented, req.user?._id, "post");
+
     return successResponse(res, "Search results fetched successfully", {
       type,
       query: q,
-      results: posts.map(presentPost),
+      results: presented,
     });
   }
 

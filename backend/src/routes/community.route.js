@@ -1,5 +1,5 @@
 import { Router } from "express";
-import requireAuth from "../middlewares/auth.middleware.js";
+import requireAuth, { optionalAuth } from "../middlewares/auth.middleware.js";
 import {
   validateCreateCommunity,
   validateUpdateCommunity,
@@ -14,16 +14,20 @@ import {
   leaveCommunity,
   listMembers,
   listCommunityPosts,
+  listMyCommunities,
   updateMemberRole,
 } from "../controllers/community.controller.js";
 
 const router = Router();
 
+// Authenticated: must be registered before "/:slug" so it isn't read as a slug.
+router.get("/mine", requireAuth, listMyCommunities);
+
 // Public reads
 router.get("/", listCommunities);
 router.get("/:slug", getCommunity);
 router.get("/:slug/members", listMembers);
-router.get("/:slug/posts", listCommunityPosts);
+router.get("/:slug/posts", optionalAuth, listCommunityPosts);
 
 // Authenticated writes
 router.post("/", requireAuth, validateCreateCommunity, createCommunity);

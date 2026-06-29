@@ -4,7 +4,7 @@ import Community from "../models/community.model.js";
 import ApiError from "../utils/apiError.util.js";
 import asyncHandler from "../utils/asyncHandler.util.js";
 import { successResponse } from "../utils/response.util.js";
-import { applyVote } from "../services/vote.service.js";
+import { applyVote, attachUserVotes } from "../services/vote.service.js";
 import { presentPost } from "../utils/postPresenter.util.js";
 import {
   assertCanParticipate,
@@ -57,11 +57,13 @@ export const createPost = asyncHandler(async (req, res) => {
   );
 });
 
-// GET /posts/:id — public.
+// GET /posts/:id — public (personalized with the viewer's vote if authed).
 export const getPost = asyncHandler(async (req, res) => {
   const post = await findPostById(req.params.id, { populate: true });
+  const presented = presentPost(post);
+  await attachUserVotes([presented], req.user?._id, "post");
   return successResponse(res, "Post fetched successfully", {
-    post: presentPost(post),
+    post: presented,
   });
 });
 

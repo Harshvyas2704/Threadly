@@ -6,6 +6,7 @@ import ApiError from "../utils/apiError.util.js";
 import asyncHandler from "../utils/asyncHandler.util.js";
 import { successResponse } from "../utils/response.util.js";
 import { presentPost } from "../utils/postPresenter.util.js";
+import { attachUserVotes } from "../services/vote.service.js";
 import { slugify } from "../utils/slug.util.js";
 import {
   cacheAside,
@@ -110,6 +111,29 @@ export const createCommunity = asyncHandler(async (req, res) => {
   } finally {
     session.endSession();
   }
+});
+
+// GET /communities/mine — communities the current user belongs to.
+export const listMyCommunities = asyncHandler(async (req, res) => {
+  const memberships = await CommunityMember.find({
+    userId: req.user._id,
+    role: { $ne: "banned" },
+  }).select("communityId role");
+
+  const roleByCommunity = new Map(
+    memberships.map((m) => [String(m.communityId), m.role]),
+  );
+
+  const communities = await Community.find({
+    _id: { $in: memberships.map((m) => m.communityId) },
+  }).sort({ name: 1 });
+
+  return successResponse(res, "Your communities fetched successfully", {
+    communities: communities.map((c) => ({
+      ...presentCommunity(c),
+      role: roleByCommunity.get(String(c._id)),
+    })),
+  });
 });
 
 // GET /communities/:slug — public details, cached for 10 minutes.
@@ -234,8 +258,11 @@ export const listCommunityPosts = asyncHandler(async (req, res) => {
     .skip((page - 1) * limit)
     .limit(limit);
 
+  const presented = posts.map(presentPost);
+  await attachUserVotes(presented, req.user?._id, "post");
+
   return successResponse(res, "Community posts fetched successfully", {
-    posts: posts.map(presentPost),
+    posts: presented,
     page,
     limit,
   });
