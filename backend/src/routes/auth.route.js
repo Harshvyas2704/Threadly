@@ -1,9 +1,21 @@
 import { Router } from "express";
-import authValidation from "../validators/auth.validator.js";
-import { authController } from "../controllers/auth.controller.js";
+import {
+  validateRegister,
+  validateLogin,
+} from "../validators/auth.validator.js";
+import {
+  register,
+  login,
+  logout,
+  refresh,
+} from "../controllers/auth.controller.js";
+import { loginRateLimit } from "../middlewares/rateLimit.middleware.js";
 
-const route = Router();
+const router = Router();
 
-route.post("/register", [authValidation], authController);
+router.post("/register", validateRegister, register);
+router.post("/login", loginRateLimit, validateLogin, login);
+router.post("/logout", logout);
+router.post("/refresh", refresh);
 
-export default route;
+export default router;
